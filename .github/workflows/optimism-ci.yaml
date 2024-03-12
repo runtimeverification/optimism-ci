@@ -21,8 +21,8 @@ jobs:
     runs-on: [self-hosted, linux, prover]
     steps:
 
-      - name: "Install KaaS"
-        uses: runtimeverification/install-kaas@v0.0.1
+      # - name: "Install KaaS"
+      #   uses: runtimeverification/install-kaas@v0.0.1
         
       - name: 'Check out code'
         uses: actions/checkout@v4
