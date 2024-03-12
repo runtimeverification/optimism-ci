@@ -20,6 +20,10 @@ jobs:
     name: 'Optimism Kontrol CI'
     runs-on: [self-hosted, linux, prover]
     steps:
+
+      - name: "Install KaaS"
+        uses: runtimeverification/install-kaas@v1
+        
       - name: 'Check out code'
         uses: actions/checkout@v4
         with:
@@ -42,6 +46,8 @@ jobs:
         run: |
           # Run the following in the running docker container
           pushd optimism > /dev/null
+          # Need to checkout submodules, GH action doesn't do this properly. 
+          git submodule update --init --recursive
           find . -name "run-kontrol.sh" -type f -exec {} ${{ github.event.inputs.extra_args }} \;
           
       - name: 'Upload results.tar.gz'
