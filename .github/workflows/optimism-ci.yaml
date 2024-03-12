@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  sanity-check:
+  optimism:
     name: 'Optimism Kontrol CI'
     runs-on: [self-hosted, linux, prover]
     steps:
