@@ -1,1 +1,0 @@
-bash kontrol/run-kontrol.sh 2>&1 | tee kontrol/log.out
