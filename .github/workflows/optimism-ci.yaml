@@ -10,15 +10,15 @@ on:
         description: 'Additional Arguments to for run_kontro.sh '
         required: false
 
-# Stop in progress workflows on the same branch and same workflow to use latest committed code
+# Multiple Runs will need to be allowed to queue
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   sanity-check:
-    name: 'Sanity Check'
-    runs-on: [self-hosted, linux, flyweight]
+    name: 'Optimism Kontrol CI'
+    runs-on: [self-hosted, linux, prover]
     steps:
       - name: 'Check out code'
         uses: actions/checkout@v4
