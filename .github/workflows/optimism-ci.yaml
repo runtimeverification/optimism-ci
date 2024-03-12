@@ -38,6 +38,7 @@ jobs:
           submodules: 'recursive'
  
       - name: 'Run Kontrol'
+        shell: bash
         run: |
           # Run the following in the running docker container
           pushd optimism > /dev/null
