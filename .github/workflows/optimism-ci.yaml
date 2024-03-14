@@ -21,15 +21,15 @@ jobs:
     runs-on: [self-hosted, linux, prover]
     steps:
 
-      # - name: "Install KaaS"
-      #   uses: runtimeverification/install-kaas@v0.0.1
+      - name: "Install KaaS"
+        uses: runtimeverification/install-kaas@v0.1.0
         
-      - name: 'Check out code'
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.JENKINS_GITHUB_PAT }}
-          fetch-depth: 0 
-          submodules: 'recursive'
+      # - name: 'Check out code'
+      #   uses: actions/checkout@v4
+      #   with:
+      #     token: ${{ secrets.JENKINS_GITHUB_PAT }}
+      #     fetch-depth: 0 
+      #     submodules: 'recursive'
           
       - name: "Checkout Optimism"
         uses: actions/checkout@v4
@@ -40,6 +40,11 @@ jobs:
           ref: ${{ github.event.inputs.branch_name }}
           fetch-depth: 0
           submodules: 'recursive'
+
+      - name: 'KaaS KCFG Download'
+        run: |
+          echo "Placeholder for KCFG Download"
+          echo "kaas-cli --token KAAS_TOKEN download --vault KAAS_PROJECT_ID " 
  
       - name: 'Run Kontrol'
         shell: bash
@@ -49,6 +54,11 @@ jobs:
           # Need to checkout submodules, GH action doesn't do this properly. 
           git submodule update --init --recursive
           find . -name "run-kontrol.sh" -type f -exec {} ${{ github.event.inputs.extra_args }} \;
+
+      - name: 'KaaS KCFG Upload'
+        run: |
+          echo "Placeholder for KCFG Upload"
+          echo "kaas-cli --token $KAAS_TOKEN upload --vault $KAAS_PROJECT_ID" 
           
       - name: 'Upload results.tar.gz'
         if: always()
