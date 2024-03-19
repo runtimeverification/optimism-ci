@@ -63,6 +63,7 @@ jobs:
       - name: 'KCFG Upload Results'
         shell: bash
         run: |
+          pushd optimism/packages/contracts-bedrock > /dev/null
           kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload-s3 -d kout-proofs/
       
       - name: 'Upload results.tar.gz'
@@ -70,5 +71,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Kontrol Results
-          path: kontrol-results_latest.tar.gz
+          path: optimism/**/results-*.tar.gz
           retention-days: 5
