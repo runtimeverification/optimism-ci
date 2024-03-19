@@ -26,24 +26,26 @@ jobs:
         with:
           github-token: ${{ secrets.JENKINS_GITHUB_PAT }}
         
-      # - name: 'Check out code'
+      # - name: "Checkout Optimism"
       #   uses: actions/checkout@v4
       #   with:
+      #     repository: 'ethereum-optimism/optimism'
       #     token: ${{ secrets.JENKINS_GITHUB_PAT }}
-      #     fetch-depth: 0 
+      #     path: 'optimism'
+      #     ref: ${{ github.event.inputs.branch_name }}
+      #     fetch-depth: 0
       #     submodules: 'recursive'
-          
-      - name: "Checkout Optimism"
+      - name: "Checkout Optimism (RV Fork)"
         uses: actions/checkout@v4
         with:
-          repository: 'ethereum-optimism/optimism'
+          repository: 'runtimeverification/_audits_Ethereum-optimism_pausability'
           token: ${{ secrets.JENKINS_GITHUB_PAT }}
           path: 'optimism'
           ref: ${{ github.event.inputs.branch_name }}
           fetch-depth: 0
           submodules: 'recursive'
-      
-      - name: "Pull KCFG's"
+
+      - name: "Download KCFG's"
         shell: bash
         run: |
           pushd optimism/packages/contracts-bedrock > /dev/null
@@ -58,11 +60,6 @@ jobs:
           git submodule update --init --recursive
           find . -name "run-kontrol.sh" -type f -exec {} ${{ github.event.inputs.extra_args }} \;
 
-      - name: 'KaaS KCFG Upload'
-        run: |
-          echo "Placeholder for KCFG Upload"
-          echo "kaas-cli --token $KAAS_TOKEN upload --vault $KAAS_PROJECT_ID" 
-          
       - name: 'KCFG Upload Results'
         shell: bash
         run: |
