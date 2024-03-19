@@ -23,6 +23,8 @@ jobs:
 
       - name: "Install KaaS"
         uses: runtimeverification/install-kaas@v0.1.0
+        with:
+          github-token: ${{ secrets.JENKINS_GITHUB_PAT }}
         
       # - name: 'Check out code'
       #   uses: actions/checkout@v4
@@ -40,17 +42,18 @@ jobs:
           ref: ${{ github.event.inputs.branch_name }}
           fetch-depth: 0
           submodules: 'recursive'
-
-      - name: 'KaaS KCFG Download'
+      
+      - name: "Pull KCFG's"
+        shell: bash
         run: |
-          echo "Placeholder for KCFG Download"
-          echo "kaas-cli --token KAAS_TOKEN download --vault KAAS_PROJECT_ID " 
- 
+          pushd optimism/packages/contracts-bedrock > /dev/null
+          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} download -d kout-proofs/
+  
       - name: 'Run Kontrol'
         shell: bash
         run: |
           # Run the following in the running docker container
-          pushd optimism > /dev/null
+          pushd optimism/packages/contracts-bedrock > /dev/null
           # Need to checkout submodules, GH action doesn't do this properly. 
           git submodule update --init --recursive
           find . -name "run-kontrol.sh" -type f -exec {} ${{ github.event.inputs.extra_args }} \;
@@ -60,6 +63,11 @@ jobs:
           echo "Placeholder for KCFG Upload"
           echo "kaas-cli --token $KAAS_TOKEN upload --vault $KAAS_PROJECT_ID" 
           
+      - name: 'KCFG Upload Results'
+        shell: bash
+        run: |
+          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload-s3 -d kout-proofs/
+      
       - name: 'Upload results.tar.gz'
         if: always()
         uses: actions/upload-artifact@v3
