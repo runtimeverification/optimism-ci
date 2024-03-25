@@ -18,7 +18,7 @@ concurrency:
 jobs:
   optimism:
     name: 'Optimism Kontrol CI'
-    runs-on: [self-hosted, linux, prover]
+    runs-on: [self-hosted, linux, kaas]
     steps:
 
       - name: "Install KaaS"
