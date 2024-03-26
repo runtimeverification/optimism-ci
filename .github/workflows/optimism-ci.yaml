@@ -21,10 +21,10 @@ jobs:
     runs-on: [self-hosted, linux, kaas]
     steps:
 
-      - name: "Install KaaS"
-        uses: runtimeverification/install-kaas@v0.1.0
-        with:
-          github-token: ${{ secrets.JENKINS_GITHUB_PAT }}
+      # - name: "Install KaaS"
+      #   uses: runtimeverification/install-kaas@v0.1.0
+      #   with:
+      #     github-token: ${{ secrets.JENKINS_GITHUB_PAT }}
         
       # - name: "Checkout Optimism"
       #   uses: actions/checkout@v4
@@ -45,11 +45,11 @@ jobs:
           fetch-depth: 0
           submodules: 'recursive'
 
-      - name: "Download KCFG's"
-        shell: bash
-        run: |
-          pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} download -d kout-proofs/
+      # - name: "Download KCFG's"
+      #   shell: bash
+      #   run: |
+      #     pushd optimism/packages/contracts-bedrock > /dev/null
+      #     kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} download -d kout-proofs/
   
       - name: 'Run Kontrol'
         shell: bash
@@ -61,11 +61,11 @@ jobs:
           git submodule update --init --recursive
           find . -name "run-kontrol.sh" -type f -exec {} ${{ github.event.inputs.extra_args }} \;
 
-      - name: 'KCFG Upload Results'
-        shell: bash
-        run: |
-          pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload-s3 -d kout-proofs/
+      # - name: 'KCFG Upload Results'
+      #   shell: bash
+      #   run: |
+      #     pushd optimism/packages/contracts-bedrock > /dev/null
+      #     kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload-s3 -d kout-proofs/
       
       - name: 'Upload results.tar.gz'
         if: always()
