@@ -1,5 +1,5 @@
 ---
-name: 'Optimism & Kontrol CI'
+name: 'Client: Optimism'
 on:
   workflow_dispatch:
     inputs:
