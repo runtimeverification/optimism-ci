@@ -9,6 +9,9 @@ on:
       extra_args:
         description: 'Additional Arguments to for run_kontro.sh '
         required: false
+      statuses_sha:
+        description: 'SHA of the commit to report back to'
+        required: false
 
 # Multiple Runs will need to be allowed to queue
 concurrency:
@@ -20,11 +23,26 @@ jobs:
     name: 'Optimism Kontrol CI'
     runs-on: [self-hosted, linux, kaas]
     steps:
+      - name: Report status back to original repository
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.JENKINS_GITHUB_PAT }}" \
+            https://api.github.com/repos/runtimeverification/circleCI-TestBed/statuses/$GITHUB_SHA \
+            -d '{
+              "state": "pending",
+              "target_url": "https://github.com/runtimeverification/optimism-ci/actions/runs/$GITHUB_RUN_ID",
+              "description": "The workflow dispatch job is running",
+              "context": "workflow-dispatch"
+            }'
+        env:
+          GITHUB_SHA: ${{ github.event.client_payload.sha }}
 
-      - name: "Install KaaS"
-        uses: runtimeverification/install-kaas@v0.1.0
-        with:
-          github-token: ${{ secrets.JENKINS_GITHUB_PAT }}
+
+      # - name: "Install KaaS"
+      #   uses: runtimeverification/install-kaas@v0.1.0
+      #   with:
+      #     github-token: ${{ secrets.JENKINS_GITHUB_PAT }}
         
       # - name: "Checkout Optimism"
       #   uses: actions/checkout@v4
@@ -35,42 +53,42 @@ jobs:
       #     ref: ${{ github.event.inputs.branch_name }}
       #     fetch-depth: 0
       #     submodules: 'recursive'
-      - name: "Checkout Optimism (RV Fork)"
-        uses: actions/checkout@v4
-        with:
-          repository: 'runtimeverification/_audits_Ethereum-optimism_pausability'
-          token: ${{ secrets.JENKINS_GITHUB_PAT }}
-          path: 'optimism'
-          ref: ${{ github.event.inputs.branch_name }}
-          fetch-depth: 0
-          submodules: 'recursive'
+      # - name: "Checkout Optimism (RV Fork)"
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: 'runtimeverification/_audits_Ethereum-optimism_pausability'
+      #     token: ${{ secrets.JENKINS_GITHUB_PAT }}
+      #     path: 'optimism'
+      #     ref: ${{ github.event.inputs.branch_name }}
+      #     fetch-depth: 0
+      #     submodules: 'recursive'
 
-      - name: "Download KCFG's"
-        shell: bash
-        run: |
-          pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} download -d kout-proofs/
+      # - name: "Download KCFG's"
+      #   shell: bash
+      #   run: |
+      #     pushd optimism/packages/contracts-bedrock > /dev/null
+      #     kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} download -d kout-proofs/
   
-      - name: 'Run Kontrol'
-        shell: bash
-        run: |
-          set -xeu pipefail
-          # Run the following in the running docker container
-          pushd optimism/packages/contracts-bedrock > /dev/null
-          # Need to checkout submodules, GH action doesn't do this properly. 
-          git submodule update --init --recursive
-          find . -name "run-kontrol.sh" -type f -exec {} ${{ github.event.inputs.extra_args }} \;
+      # - name: 'Run Kontrol'
+      #   shell: bash
+      #   run: |
+      #     set -xeu pipefail
+      #     # Run the following in the running docker container
+      #     pushd optimism/packages/contracts-bedrock > /dev/null
+      #     # Need to checkout submodules, GH action doesn't do this properly. 
+      #     git submodule update --init --recursive
+      #     find . -name "run-kontrol.sh" -type f -exec {} ${{ github.event.inputs.extra_args }} \;
 
-      - name: 'KCFG Upload Results'
-        shell: bash
-        run: |
-          pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload-s3 -d kout-proofs/
+      # - name: 'KCFG Upload Results'
+      #   shell: bash
+      #   run: |
+      #     pushd optimism/packages/contracts-bedrock > /dev/null
+      #     kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload-s3 -d kout-proofs/
       
-      - name: 'Upload results.tar.gz'
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: Kontrol Results
-          path: optimism/**/results-*.tar.gz
-          retention-days: 5
+      # - name: 'Upload results.tar.gz'
+      #   if: always()
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: Kontrol Results
+      #     path: optimism/**/results-*.tar.gz
+      #     retention-days: 5
