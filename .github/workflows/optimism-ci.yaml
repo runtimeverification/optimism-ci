@@ -87,7 +87,7 @@ jobs:
         shell: bash
         run: |
           pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload-s3 -d kout-proofs/
+          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload -d kout-proofs/
       
       - name: 'Upload results.tar.gz'
         if: always()
