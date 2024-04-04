@@ -11,7 +11,7 @@ on:
         required: false
       statuses_sha:
         description: 'SHA of the commit to report back to'
-        required: false
+        required: true
 
 # Multiple Runs will need to be allowed to queue
 concurrency:
@@ -47,6 +47,7 @@ jobs:
       #     ref: ${{ github.event.inputs.branch_name }}
       #     fetch-depth: 0
       #     submodules: 'recursive'
+      
       - name: "Checkout Optimism (RV Fork)"
         uses: actions/checkout@v4
         with:
