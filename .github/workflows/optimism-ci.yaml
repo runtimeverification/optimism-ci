@@ -47,7 +47,7 @@ jobs:
       #     ref: ${{ github.event.inputs.branch_name }}
       #     fetch-depth: 0
       #     submodules: 'recursive'
-      
+
       - name: "Checkout Optimism (RV Fork)"
         uses: actions/checkout@v4
         with:
@@ -58,35 +58,35 @@ jobs:
           fetch-depth: 0
           submodules: 'recursive'
 
-      # - name: "Download KCFG's"
-      #   shell: bash
-      #   run: |
-      #     pushd optimism/packages/contracts-bedrock > /dev/null
-      #     kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} download -d kout-proofs/
+      - name: "Download KCFG's"
+        shell: bash
+        run: |
+          pushd optimism/packages/contracts-bedrock > /dev/null
+          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} download -d kout-proofs/
   
-      # - name: 'Run Kontrol'
-      #   shell: bash
-      #   run: |
-      #     set -xeu pipefail
-      #     # Run the following in the running docker container
-      #     pushd optimism/packages/contracts-bedrock > /dev/null
-      #     # Need to checkout submodules, GH action doesn't do this properly. 
-      #     git submodule update --init --recursive
-      #     find . -name "run-kontrol.sh" -type f -exec {} ${{ github.event.inputs.extra_args }} \;
+      - name: 'Run Kontrol'
+        shell: bash
+        run: |
+          set -xeu pipefail
+          # Run the following in the running docker container
+          pushd optimism/packages/contracts-bedrock > /dev/null
+          # Need to checkout submodules, GH action doesn't do this properly. 
+          git submodule update --init --recursive
+          find . -name "run-kontrol.sh" -type f -exec {} ${{ github.event.inputs.extra_args }} \;
 
-      # - name: 'KCFG Upload Results'
-      #   shell: bash
-      #   run: |
-      #     pushd optimism/packages/contracts-bedrock > /dev/null
-      #     kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload-s3 -d kout-proofs/
+      - name: 'KCFG Upload Results'
+        shell: bash
+        run: |
+          pushd optimism/packages/contracts-bedrock > /dev/null
+          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload-s3 -d kout-proofs/
       
-      # - name: 'Upload results.tar.gz'
-      #   if: always()
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: Kontrol Results
-      #     path: optimism/**/results-*.tar.gz
-      #     retention-days: 5
+      - name: 'Upload results.tar.gz'
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Kontrol Results
+          path: optimism/**/results-*.tar.gz
+          retention-days: 5
 
       - name: Report Pass Status
         if: always() && success()
@@ -99,7 +99,7 @@ jobs:
             https://api.github.com/repos/runtimeverification/circleCI-TestBed/statuses/${{ github.event.inputs.statuses_sha }} \
             -d '{"state":"success","target_url":"https://github.com/runtimeverification/optimism-ci/actions/runs/${{ github.run_id }}","description":"Optimism Proof Execution Pending","context":"runtimeverification/optimism-ci"}'
 
-      - name: Report Pass Status
+      - name: Report Failure Status
         if: always() && failure()
         run: |
           curl -L \
