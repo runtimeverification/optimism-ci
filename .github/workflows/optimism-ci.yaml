@@ -89,9 +89,9 @@ jobs:
           pushd optimism/packages/contracts-bedrock > /dev/null
           kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload -d kout-proofs/
       
-      - name: 'Upload results.tar.gz'
+      - name: 'Upload KCFG Results to Summary'
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.3.1
         with:
           name: Kontrol Results
           path: optimism/**/results-*.tar.gz
