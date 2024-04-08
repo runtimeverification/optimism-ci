@@ -76,16 +76,12 @@ jobs:
       - name: 'Run Kontrol'
         shell: bash
         run: |
-          set -x
+          set -xe
           # Run the following in the running docker container
           pushd optimism/packages/contracts-bedrock > /dev/null
           # Need to checkout submodules, GH action doesn't do this properly. 
           git submodule update --init --recursive
           find . -name "run-kontrol.sh" -type f -exec {} ${{ github.event.inputs.extra_args }} \;
-          if "$?" -ne 0; then
-            echo "Kontrol failed"
-            exit 1
-          fi
 
       - name: 'KCFG Upload Results'
         shell: bash
