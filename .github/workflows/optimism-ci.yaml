@@ -74,7 +74,6 @@ jobs:
         run: |
           pushd optimism
           echo "KONTROL_VERSION=$(cat versions.json | jq -r .kontrol)" > "$GITHUB_OUTPUT"
-          echo "KONTROL_VERSION: $(cat versions.json | jq -r .kontrol)"
 
       - name: Install Kontrol
         uses: runtimeverification/install-kontrol@v1.0.1
@@ -95,7 +94,8 @@ jobs:
           pushd optimism/packages/contracts-bedrock > /dev/null
           # Need to checkout submodules, GH action doesn't do this properly. 
           git submodule update --init --recursive
-          find . -name "run-kontrol.sh" -type f -exec {} local ${{ github.event.inputs.extra_args }} \;
+          ./test/kontrol/scripts/run-kontrol.sh local ${{ github.event.inputs.extra_args }}
+          # find . -name "run-kontrol.sh" -type f -exec {} local ${{ github.event.inputs.extra_args }} \;
 
       - name: 'KCFG Upload Results'
         shell: bash
