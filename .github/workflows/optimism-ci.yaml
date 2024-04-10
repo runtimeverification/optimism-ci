@@ -79,7 +79,7 @@ jobs:
       - name: Install Kontrol
         uses: runtimeverification/install-kontrol@v1.0.1
         with:
-          version: ${{ steps.kontrol-version.outputs.KONTROL_VERSION }}
+          version: "v${{ steps.kontrol-version.outputs.KONTROL_VERSION }}"
     
       - name: "Download KCFG's"
         shell: bash
