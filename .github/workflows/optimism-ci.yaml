@@ -80,7 +80,7 @@ jobs:
         with:
           version: "v${{ steps.kontrol-version.outputs.KONTROL_VERSION }}"
     
-      - name: "Download KCFG's"
+      - name: "Download KCFG Cache Results"
         shell: bash
         run: |
           pushd optimism/packages/contracts-bedrock > /dev/null
@@ -95,10 +95,10 @@ jobs:
           # Need to checkout submodules, GH action doesn't do this properly. 
           git submodule update --init --recursive
           ./test/kontrol/scripts/run-kontrol.sh local ${{ github.event.inputs.extra_args }}
-          # find . -name "run-kontrol.sh" -type f -exec {} local ${{ github.event.inputs.extra_args }} \;
 
-      - name: 'KCFG Upload Results'
+      - name: 'KCFG Upload Cache Results'
         shell: bash
+        if: always()
         run: |
           pushd optimism/packages/contracts-bedrock > /dev/null
           kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload -d ./kout-proofs/
@@ -107,8 +107,8 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4.3.1
         with:
-          name: Kontrol Results
-          path: optimism/**/results-*.tar.gz
+          name: Kontrol Results Folder
+          path: optimism/**/kout-proofs/
           retention-days: 5
 
       - name: Report Pass Status
