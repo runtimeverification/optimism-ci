@@ -41,7 +41,7 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/${{ github.event.inputs.org }}/${{ github.event.inputs.repository }}/statuses/${{ github.event.inputs.statuses_sha }} \
             -d '{"state":"pending","target_url":"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}","description":"Proofs Pending","context":"runtimeverification/proof-runner"}'
-        
+
       - name: "Install KaaS"
         uses: runtimeverification/install-kaas@v0.1.0
         with:
@@ -67,6 +67,19 @@ jobs:
           fetch-depth: 0
           submodules: 'recursive'
 
+      
+      - name: Get Kontrol Version
+        id: kontrol-version
+        shell: bash
+        working-directory: optimism
+        run: |
+          echo "KONTROL_VERSION=$(cat version.json | jq -r .kontrol)" > $GITHUB_OUTPUT
+
+      - name: Install Kontrol
+        uses: runtimeverification/install-kontrol@v1.0.1
+        with:
+          version: ${{ steps.kontrol-version.outputs.KONTROL_VERSION }}
+    
       - name: "Download KCFG's"
         shell: bash
         run: |
@@ -81,7 +94,7 @@ jobs:
           pushd optimism/packages/contracts-bedrock > /dev/null
           # Need to checkout submodules, GH action doesn't do this properly. 
           git submodule update --init --recursive
-          find . -name "run-kontrol.sh" -type f -exec {} ${{ github.event.inputs.extra_args }} \;
+          find . -name "run-kontrol.sh" -type f -exec {} local ${{ github.event.inputs.extra_args }} \;
 
       - name: 'KCFG Upload Results'
         shell: bash
