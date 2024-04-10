@@ -73,12 +73,12 @@ jobs:
         shell: bash
         working-directory: optimism
         run: |
-          echo "KONTROL_VERSION=$(cat version.json | jq -r .kontrol)" > $GITHUB_OUTPUT
+          echo "KONTROL_VERSION=$(cat version.json | jq -r .kontrol)" > $GITHUB_ENV
 
       - name: Install Kontrol
         uses: runtimeverification/install-kontrol@v1.0.1
         with:
-          version: ${{ steps.kontrol-version.outputs.KONTROL_VERSION }}
+          version: $KONTROL_VERSION
     
       - name: "Download KCFG's"
         shell: bash
