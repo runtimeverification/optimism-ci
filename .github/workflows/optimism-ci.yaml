@@ -72,7 +72,8 @@ jobs:
         id: kontrol-version
         shell: bash
         run: |
-          pushd optimism > /dev/null
+          ls -l
+          pushd ../optimism
           echo "KONTROL_VERSION=$(cat version.json | jq -r .kontrol)" > "$GITHUB_OUTPUT"
           echo "KONTROL_VERSION: $(cat version.json | jq -r .kontrol)"
 
