@@ -112,7 +112,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.1
         with:
           name: Kontrol Results Folder
-          path: optimism/./**/results-*tar.gz
+          path: optimism/**/results-*tar.gz
           retention-days: 5
 
       - name: Report Pass Status
