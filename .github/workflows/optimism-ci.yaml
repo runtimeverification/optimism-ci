@@ -33,6 +33,7 @@ jobs:
     runs-on: [self-hosted, linux, kaas]
     steps:
       - name: Report Pending Status
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |
@@ -42,7 +43,7 @@ jobs:
               sha: '${{ github.event.inputs.statuses_sha }}',
               state: 'pending',
               target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}',
-              description: 'Optimism Proof Execution Success',
+              description: 'Optimism Proof Execution Pending',
               context: 'runtimeverification/proof-runner'
             });
 
@@ -118,6 +119,7 @@ jobs:
  
       - name: Report Pass Status
         if: always() && success()
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |
@@ -133,6 +135,7 @@ jobs:
 
       - name: Report Failure Status
         if: always() && failure()
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |
