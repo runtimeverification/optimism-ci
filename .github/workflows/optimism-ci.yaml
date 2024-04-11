@@ -43,7 +43,7 @@ jobs:
                 "state": "pending",
                 "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
                 "description": "Proofs Pending",
-                "context": "runtimeverification/proof-runner"
+                "context": "runtimeverification/optimism-proof-runner"
               }'
 
       - name: "Install KaaS"
@@ -128,7 +128,7 @@ jobs:
                 "state": "success",
                 "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
                 "description": "Optimism Proof Execution Success",
-                "context": "runtimeverification/proof-runner"
+                "context": "runtimeverification/optimism-proof-runner"
               }'
       
       - name: Report Failure Status
@@ -144,5 +144,5 @@ jobs:
                 "state": "failure",
                 "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
                 "description": "Proof Execution Failed",
-                "context": "runtimeverification/proof-runner"
+                "context": "runtimeverification/optimism-proof-runner"
               }'
