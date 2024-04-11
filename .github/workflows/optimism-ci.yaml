@@ -31,6 +31,8 @@ jobs:
   optimism:
     name: 'Optimism Kontrol CI'
     runs-on: [self-hosted, linux, kaas]
+    env:
+      GH_TOKEN: ${{ secrets.JENKINS_GITHUB_PAT}}
     steps:
       - name: Report Pending Status
         run: |
@@ -71,7 +73,6 @@ jobs:
           fetch-depth: 0
           submodules: 'recursive'
 
-      
       - name: Get Kontrol Version
         id: kontrol-version
         shell: bash
