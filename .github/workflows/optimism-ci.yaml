@@ -113,10 +113,9 @@ jobs:
         uses: actions/upload-artifact@v4.3.1
         with:
           name: Kontrol Results Folder
-          path: optimism/**/kout-proofs/
+          path: optimism/./**/results-*tar.gz
           retention-days: 5
 
- 
       - name: Report Pass Status
         if: always() && success()
         continue-on-error: true
@@ -148,5 +147,3 @@ jobs:
               description: 'Proof Execution Failed',
               context: 'runtimeverification/proof-runner'
             });
-
-  
