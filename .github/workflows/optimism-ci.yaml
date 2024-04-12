@@ -133,7 +133,7 @@ jobs:
               }'
       
       - name: Report Failure Status
-        if: always() && failure()
+        if: always() && (failure() || cancelled())
         run: |
             curl -L \
               -X POST \
