@@ -30,7 +30,7 @@ concurrency:
 jobs:
   optimism:
     name: 'Optimism Kontrol CI'
-    runs-on: [self-hosted-test]
+    runs-on: [self-hosted, linux, kaas]
     env:
       GH_TOKEN: ${{ secrets.JENKINS_GITHUB_PAT}}
     steps:
