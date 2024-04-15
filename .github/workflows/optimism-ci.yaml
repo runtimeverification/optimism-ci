@@ -7,7 +7,7 @@ on:
         description: 'Branch Name to Test From'
         required: true
       extra_args:
-        description: 'Additional Arguments to for run_kontro.sh '
+        description: 'Additional Arguments to for run-kontrol.sh '
         required: false
       statuses_sha:
         description: 'SHA of the commit to report back to'
@@ -48,10 +48,10 @@ jobs:
                 "context": "runtimeverification/optimism-proof-runner"
               }'
 
-      - name: "Install KaaS"
-        uses: runtimeverification/install-kaas@v0.1.0
-        with:
-          github-token: ${{ secrets.JENKINS_GITHUB_PAT }}
+      # - name: "Install KaaS"
+      #   uses: runtimeverification/install-kaas@v0.1.0
+      #   with:
+      #     github-token: ${{ secrets.JENKINS_GITHUB_PAT }}
         
       # - name: "Checkout Optimism"
       #   uses: actions/checkout@v4
@@ -85,11 +85,11 @@ jobs:
         with:
           version: "v${{ steps.kontrol-version.outputs.KONTROL_VERSION }}"
     
-      - name: "Download KCFG Cache Results"
-        shell: bash
-        run: |
-          pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} download -d ./kout-proofs/
+      # - name: "Download KCFG Cache Results"
+      #   shell: bash
+      #   run: |
+      #     pushd optimism/packages/contracts-bedrock > /dev/null
+      #     kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} download -d ./kout-proofs/
   
       - name: 'Run Kontrol'
         shell: bash
@@ -101,12 +101,12 @@ jobs:
           git submodule update --init --recursive
           ./test/kontrol/scripts/run-kontrol.sh local ${{ github.event.inputs.extra_args }}
 
-      - name: 'KCFG Upload Cache Results'
-        shell: bash
-        if: always()
-        run: |
-          pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload -d ./kout-proofs/
+      # - name: 'KCFG Upload Cache Results'
+      #   shell: bash
+      #   if: always()
+      #   run: |
+      #     pushd optimism/packages/contracts-bedrock > /dev/null
+      #     kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload -d ./kout-proofs/
       
       - name: 'Upload KCFG Results to Summary'
         if: always()
