@@ -114,7 +114,7 @@ jobs:
         with:
           name: Kontrol Results Folder
           path: optimism/**/results-*tar.gz
-          retention-days: 5
+          retention-days: 14
 
       - name: Report Pass Status
         if: always() && success()
