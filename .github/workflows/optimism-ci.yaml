@@ -73,18 +73,18 @@ jobs:
           fetch-depth: 0
           submodules: 'recursive'
 
-      - name: Get Kontrol Version
-        id: kontrol-version
-        shell: bash
-        run: |
-          pushd optimism
-          echo "KONTROL_VERSION=$(cat versions.json | jq -r .kontrol)" > "$GITHUB_OUTPUT"
+      # - name: Get Kontrol Version
+      #   id: kontrol-version
+      #   shell: bash
+      #   run: |
+      #     pushd optimism
+      #     echo "KONTROL_VERSION=$(cat versions.json | jq -r .kontrol)" > "$GITHUB_OUTPUT"
 
-      - name: Install Kontrol
-        uses: runtimeverification/install-kontrol@v1.0.2
-        with:
-          version: "v${{ steps.kontrol-version.outputs.KONTROL_VERSION }}"
-          github-token: "${{ secrets.JENKINS_GITHUB_PAT }}"
+      # - name: Install Kontrol
+      #   uses: runtimeverification/install-kontrol@v1.0.2
+      #   with:
+      #     version: "v${{ steps.kontrol-version.outputs.KONTROL_VERSION }}"
+      #     github-token: "${{ secrets.JENKINS_GITHUB_PAT }}"
     
       # - name: "Download KCFG Cache Results"
       #   shell: bash
@@ -100,7 +100,7 @@ jobs:
           pushd optimism/packages/contracts-bedrock > /dev/null
           # Need to checkout submodules, GH action doesn't do this properly. 
           git submodule update --init --recursive
-          ./test/kontrol/scripts/run-kontrol.sh local ${{ github.event.inputs.extra_args }}
+          ./test/kontrol/scripts/run-kontrol.sh ${{ github.event.inputs.extra_args }}
 
       # - name: 'KCFG Upload Cache Results'
       #   shell: bash
