@@ -80,10 +80,11 @@ jobs:
       #     pushd optimism
       #     echo "KONTROL_VERSION=$(cat versions.json | jq -r .kontrol)" > "$GITHUB_OUTPUT"
 
-      # - name: Install Kontrol
-      #   uses: runtimeverification/install-kontrol@v1.0.1
-      #   with:
-      #     version: "v${{ steps.kontrol-version.outputs.KONTROL_VERSION }}"
+      - name: Install Kontrol
+        uses: runtimeverification/install-kontrol@v1.0.2
+        with:
+          version: "v${{ steps.kontrol-version.outputs.KONTROL_VERSION }}"
+          github-token: "${{ secrets.JENKINS_GITHUB_PAT }}"
     
       - name: "Download KCFG Cache Results"
         shell: bash
@@ -97,9 +98,15 @@ jobs:
       #     set -xe
       #     # Run the following in the running docker container
       #     pushd optimism/packages/contracts-bedrock > /dev/null
-      #     # Need to checkout submodules, GH action doesn't do this properly. 
-      #     git submodule update --init --recursive
-      #     ./test/kontrol/scripts/run-kontrol.sh local ${{ github.event.inputs.extra_args }}
+      #     kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload -d ./kout-proofs/
+      
+      - name: 'Upload KCFG Results to Summary'
+        if: always()
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: Kontrol Results Folder
+          path: optimism/**/results-*tar.gz
+          retention-days: 14
 
       - name: 'KCFG Upload Cache Results'
         shell: bash
