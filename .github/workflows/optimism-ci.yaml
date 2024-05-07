@@ -85,7 +85,10 @@ jobs:
       #   with:
       #     version: "v${{ steps.kontrol-version.outputs.KONTROL_VERSION }}"
       #     github-token: "${{ secrets.JENKINS_GITHUB_PAT }}"
-    
+      - name: Echo kaas-cli help
+        run: |
+            kaas-cli --help
+            kaas-cli download --help
       - name: "Download KCFG Cache Results"
         shell: bash
         run: |
