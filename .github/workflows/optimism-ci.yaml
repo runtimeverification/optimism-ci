@@ -80,11 +80,11 @@ jobs:
           pushd optimism
           echo "KONTROL_VERSION=$(cat versions.json | jq -r .kontrol)" > "$GITHUB_OUTPUT"
 
-      - name: Install Kontrol
-        uses: runtimeverification/install-kontrol@v1.0.2
-        with:
-          version: "v${{ steps.kontrol-version.outputs.KONTROL_VERSION }}"
-          github-token: "${{ secrets.JENKINS_GITHUB_PAT }}"
+      # - name: Install Kontrol
+      #   uses: runtimeverification/install-kontrol@v1.0.2
+      #   with:
+      #     version: "v${{ steps.kontrol-version.outputs.KONTROL_VERSION }}"
+      #     github-token: "${{ secrets.JENKINS_GITHUB_PAT }}"
     
       - name: "Download KCFG Cache Results"
         shell: bash
