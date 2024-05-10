@@ -90,7 +90,7 @@ jobs:
         shell: bash
         run: |
           pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli download --vault ${{ secrets.OPTIMISM_VAULT }} ---token ${{ secrets.OPTIMISM_TOKEN }} -d ./kout-proofs/ 
+          kaas-cli download --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} -d ./kout-proofs/ 
   
       - name: 'Run Kontrol'
         shell: bash
