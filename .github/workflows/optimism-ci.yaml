@@ -49,7 +49,7 @@ jobs:
               }'
 
       - name: "Install KaaS"
-        uses: runtimeverification/install-kaas@v0.1.0
+        uses: runtimeverification/install-kaas@v0.2.1
         with:
           github-token: ${{ secrets.JENKINS_GITHUB_PAT }}
         
@@ -86,12 +86,11 @@ jobs:
       #     version: "v${{ steps.kontrol-version.outputs.KONTROL_VERSION }}"
       #     github-token: "${{ secrets.JENKINS_GITHUB_PAT }}"
     
-      # - name: "Download KCFG Cache Results"
-      #   shell: bash
-      #   run: |
-      #     pushd optimism/packages/contracts-bedrock > /dev/null
-      #     mkdir -p kout-proofs
-      #     kaas-cli download -d ./kout-proofs/ -v ${{ secrets.OPTIMISM_VAULT }} -t ${{ secrets.OPTIMISM_TOKEN }}
+      - name: "Download KCFG Cache Results"
+        shell: bash
+        run: |
+          pushd optimism/packages/contracts-bedrock > /dev/null
+          kaas-cli download --vault ${{ secrets.OPTIMISM_VAULT }} ---token ${{ secrets.OPTIMISM_TOKEN }} -d ./kout-proofs/ 
   
       - name: 'Run Kontrol'
         shell: bash
@@ -108,7 +107,7 @@ jobs:
         if: always()
         run: |
           pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} upload -d ./kout-proofs/
+          kaas-cli upload --vault ${{ secrets.OPTIMISM_VAULT }} --token ${{ secrets.OPTIMISM_TOKEN }} -d ./kout-proofs/
       
       - name: 'Upload KCFG Results to Summary'
         if: always()
