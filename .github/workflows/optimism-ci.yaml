@@ -60,7 +60,7 @@ jobs:
           token: ${{ secrets.JENKINS_GITHUB_PAT }}
           path: 'optimism'
           ref: ${{ github.event.inputs.branch_name }}
-          fetch-depth: 1
+          fetch-depth: 0
           submodules: 'recursive'
 
       - name: "Download KCFG Cache Results"
