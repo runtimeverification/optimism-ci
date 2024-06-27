@@ -56,7 +56,7 @@ jobs:
       - name: "Checkout Optimism"
         uses: actions/checkout@v4
         with:
-          repository: 'ethereum-optimism/optimism'
+          repository: 'runtimeverification/_audits_Ethereum-optimism_pausability'
           token: ${{ secrets.JENKINS_GITHUB_PAT }}
           path: 'optimism'
           ref: ${{ github.event.inputs.branch_name }}
