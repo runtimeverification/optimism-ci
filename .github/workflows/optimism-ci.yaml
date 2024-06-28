@@ -59,9 +59,20 @@ jobs:
           repository: '${{ github.event.inputs.org }}/${{ github.event.inputs.repository }}'
           token: ${{ secrets.JENKINS_GITHUB_PAT }}
           path: 'optimism'
-          ref: ${{ github.event.inputs.branch_name }}
+          # ref: ${{ github.event.inputs.branch_name }}
           fetch-depth: 0
           submodules: 'recursive'
+      
+      - name: Determine if the input branch is a PR and fetch it
+        run: |
+          pushd optimism > /dev/null
+          if [[ "${{ github.event.inputs.branch_name }}" == pull/* ]]; then
+            PR_NUMBER=$(echo "${{ github.event.inputs.branch_name }}" | cut -d'/' -f2)
+            git fetch origin pull/$PR_NUMBER/head:pr-$PR_NUMBER
+            git checkout pr-$PR_NUMBER
+          else
+            git checkout ${{ github.event.inputs.branch_name }}
+          fi
 
       - name: "Download KCFG Cache Results"
         shell: bash
