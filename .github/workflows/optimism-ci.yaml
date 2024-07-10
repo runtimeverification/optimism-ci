@@ -106,6 +106,14 @@ jobs:
           path: optimism/**/results-*tar.gz
           retention-days: 14
 
+      - name: 'Upload KCFG Results to Summary'
+        if: always()
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: Kontrol Results Folder
+          path: optimism/**/kontrol_prove_report.xml
+          retention-days: 14
+
       - name: Report Pass Status
         if: always() && success()
         run: |
