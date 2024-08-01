@@ -111,7 +111,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.1
         with:
           name: Kontrol Results Folder
-          path: optimism/packages/contracts-bedrock/logs/kontrol_prove_report.xml
+          path: optimism/packages/contracts-bedrock/test/kontrol/logs/kontrol_prove_report.xml
           retention-days: 14
 
       - name: Report Pass Status
