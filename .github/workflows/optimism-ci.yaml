@@ -106,11 +106,11 @@ jobs:
           path: optimism/**/results-*tar.gz
           retention-days: 14
 
-      - name: 'Upload KCFG Results to Summary'
+      - name: 'Upload Kontrol Prove Report'
         if: always()
         uses: actions/upload-artifact@v4.3.1
         with:
-          name: Kontrol Results Folder
+          name: Kontrol Prove Report
           path: optimism/packages/contracts-bedrock/test/kontrol/logs/kontrol_prove_report.xml
           retention-days: 14
 
