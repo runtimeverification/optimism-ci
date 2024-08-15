@@ -145,6 +145,20 @@ jobs:
                 "description": "Proof Execution Failed",
                 "context": "runtimeverification/proof-runner"
               }'
+      - name: Generate Slack Payload
+        if: always() && failure()
+        run: |
+          echo '{
+            "kontrol_status": "Failure",
+            "ci_run_link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }' > payload.json
+      - name: Send Status Check to Slack
+        if: always() && failure()
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload-file-path: "./payload.json"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.OPTIMISM_WEBHOOK }}
 
       - name: Report Failure Status
         if: always() && cancelled()
