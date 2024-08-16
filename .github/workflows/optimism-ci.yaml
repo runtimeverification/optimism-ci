@@ -146,18 +146,6 @@ jobs:
                 "context": "runtimeverification/proof-runner"
               }'
 
-      - name: Send Status Failure to Slack
-        if: always() && failure()
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          payload: |
-            {
-              "kontrol_status": "Failure",
-              "ci_run_link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.OPTIMISM_WEBHOOK }}
-
       - name: Report Failure Status
         if: always() && cancelled()
         run: |
@@ -174,3 +162,15 @@ jobs:
                 "context": "runtimeverification/proof-runner"
               }'
         
+      - name: Send Status Failure to Slack
+        if: failure() || cancelled()
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "kontrol_status": "Failure",
+              "ci_run_link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.OPTIMISM_WEBHOOK }}
+  
