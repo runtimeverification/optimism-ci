@@ -163,13 +163,22 @@ jobs:
               }'
         
       - name: Send Status Failure to Slack
-        if: failure() || cancelled()
+        if: always() && (failure() || cancelled())
         uses: slackapi/slack-github-action@v1.26.0
         with:
           payload: |
             {
               "kontrol_status": "Failure",
               "ci_run_link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "GitHub Action build result: ${{ job.status }}\nhttps://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  }
+                }
+              ]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.OPTIMISM_WEBHOOK }}
