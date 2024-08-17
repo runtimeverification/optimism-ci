@@ -169,7 +169,7 @@ jobs:
           payload: |
             {
               "kontrol_status": "Failure",
-              "ci_run_link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              "ci_run_link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
               "blocks": [
                 {
                   "type": "section",
