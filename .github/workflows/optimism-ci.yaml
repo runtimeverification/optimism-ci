@@ -74,11 +74,11 @@ jobs:
             git checkout ${{ github.event.inputs.branch_name }}
           fi
 
-      - name: "Download KCFG Cache Results"
-        shell: bash
-        run: |
-          pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli download --token ${{ secrets.OPTIMISM_TOKEN }} runtimeverification/optimism-ci:latest -d ./kout-proofs/ 
+      # - name: "Download KCFG Cache Results"
+      #   shell: bash
+      #   run: |
+      #     pushd optimism/packages/contracts-bedrock > /dev/null
+      #     kaas-cli download --token ${{ secrets.OPTIMISM_TOKEN }} runtimeverification/optimism-ci:latest -d ./kout-proofs/ 
 
       - name: 'Run Kontrol'
         shell: bash
@@ -90,13 +90,13 @@ jobs:
           git submodule update --init --recursive
           ./test/kontrol/scripts/run-kontrol.sh ${{ github.event.inputs.extra_args }}
 
-      - name: 'KCFG Upload Cache Results'
-        shell: bash
-        if: always()
-        run: |
-          pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli upload --token ${{ secrets.OPTIMISM_TOKEN }} runtimeverification/optimism-ci:${{ github.event.inputs.statuses_sha }} -d ./kout-proofs/
-          kaas-cli upload --token ${{ secrets.OPTIMISM_TOKEN }} runtimeverification/optimism-ci:latest -d ./kout-proofs/
+      # - name: 'KCFG Upload Cache Results'
+      #   shell: bash
+      #   if: always()
+      #   run: |
+      #     pushd optimism/packages/contracts-bedrock > /dev/null
+      #     kaas-cli upload --token ${{ secrets.OPTIMISM_TOKEN }} runtimeverification/optimism-ci:${{ github.event.inputs.statuses_sha }} -d ./kout-proofs/
+      #     kaas-cli upload --token ${{ secrets.OPTIMISM_TOKEN }} runtimeverification/optimism-ci:latest -d ./kout-proofs/
 
       - name: 'Upload KCFG Results to Summary'
         if: always()
