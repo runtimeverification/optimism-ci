@@ -77,24 +77,26 @@ jobs:
       - name: "Set up Rust Toolchain"
         uses: dtolnay/rust-toolchain@stable
 
-      - name: "Cache Rust dependencies"
-        uses: Swatinem/rust-cache@v2
-
-      - name: "Set up Foundry Toolchain"
-        uses: foundry-rs/foundry-toolchain@v1
-
       - uses: "extractions/setup-just@v1"
         with:
           just-version: 1.35.0
 
       - name: "Install Foundry"
         run: |
+          curl -L https://foundry.paradigm.xyz | bash
+
+      - name: "Update Foundry"
+        run: |
           pushd optimism > /dev/null
-          just install-foundry
+          source $HOME/.foundry/bin/foundryup
+          export PATH=$HOME/.foundry/bin:$PATH
+          just update-foundry
 
       - name: "Generate Kontrol Summaries"
         run: |
           pushd optimism/packages/contracts-bedrock > /dev/null
+          source $HOME/.foundry/bin/foundryup
+          export PATH=$HOME/.foundry/bin:$PATH
           just kontrol-summary
           just kontrol-summary-fp
 
