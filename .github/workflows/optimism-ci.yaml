@@ -77,7 +77,8 @@ jobs:
       - name: "Set up Rust Toolchain"
         uses: dtolnay/rust-toolchain@stable
 
-      - uses: "extractions/setup-just@v1"
+      - name: "Install Just"
+        uses: extractions/setup-just@v1
         with:
           just-version: 1.35.0
 
