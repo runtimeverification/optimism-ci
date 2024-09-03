@@ -74,6 +74,24 @@ jobs:
             git checkout ${{ github.event.inputs.branch_name }}
           fi
 
+      - name: "Set up Rust Toolchain"
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: "Cache Rust dependencies"
+        uses: Swatinem/rust-cache@v2
+
+      - name: "Set up Foundry Toolchain"
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - uses: "extractions/setup-just@v1"
+        with:
+          just-version: 1.23.0
+
+      - name: "Install Foundry"
+        run: |
+          pushd optimism > /dev/null
+          just install-foundry
+
       - name: "Download KCFG Cache Results"
         shell: bash
         run: |
