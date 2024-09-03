@@ -92,6 +92,12 @@ jobs:
           pushd optimism > /dev/null
           just install-foundry
 
+      - name: "Generate Kontrol Summaries"
+        run: |
+          pushd optimism/packages/contracts-bedrock > /dev/null
+          just kontrol-summary
+          just kontrol-summary-fp
+
       - name: "Download KCFG Cache Results"
         shell: bash
         run: |
