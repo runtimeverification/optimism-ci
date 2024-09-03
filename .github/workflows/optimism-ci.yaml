@@ -85,7 +85,7 @@ jobs:
 
       - uses: "extractions/setup-just@v1"
         with:
-          just-version: 1.23.0
+          just-version: 1.35.0
 
       - name: "Install Foundry"
         run: |
