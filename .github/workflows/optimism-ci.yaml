@@ -83,10 +83,12 @@ jobs:
           just-version: 1.35.0
 
       - name: "Install Foundry"
+        shell: bash
         run: |
           curl -L https://foundry.paradigm.xyz | bash
 
       - name: "Update Foundry"
+        shell: bash
         run: |
           pushd optimism > /dev/null
           source $HOME/.foundry/bin/foundryup
@@ -94,6 +96,7 @@ jobs:
           just update-foundry
 
       - name: "Generate Kontrol Summaries"
+        shell: bash
         run: |
           pushd optimism/packages/contracts-bedrock > /dev/null
           source $HOME/.foundry/bin/foundryup
