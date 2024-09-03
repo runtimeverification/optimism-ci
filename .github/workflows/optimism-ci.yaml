@@ -74,6 +74,36 @@ jobs:
             git checkout ${{ github.event.inputs.branch_name }}
           fi
 
+      - name: "Set up Rust Toolchain"
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: "Install Just"
+        uses: extractions/setup-just@v1
+        with:
+          just-version: 1.35.0
+
+      - name: "Install Foundry"
+        shell: bash
+        run: |
+          curl -L https://foundry.paradigm.xyz | bash
+
+      - name: "Update Foundry"
+        shell: bash
+        run: |
+          pushd optimism > /dev/null
+          source $HOME/.foundry/bin/foundryup
+          export PATH=$HOME/.foundry/bin:$PATH
+          just update-foundry
+
+      - name: "Generate Kontrol Summaries"
+        shell: bash
+        run: |
+          pushd optimism/packages/contracts-bedrock > /dev/null
+          source $HOME/.foundry/bin/foundryup
+          export PATH=$HOME/.foundry/bin:$PATH
+          just kontrol-summary
+          just kontrol-summary-fp
+
       - name: "Download KCFG Cache Results"
         shell: bash
         run: |
