@@ -24,7 +24,7 @@ on:
 
 # Multiple Runs will need to be allowed to queue
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event.inputs.branch_name }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event.inputs.statuses_sha }}
   cancel-in-progress: true
 
 jobs:
