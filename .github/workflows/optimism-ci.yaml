@@ -25,7 +25,7 @@ on:
 # Multiple Runs will need to be allowed to queue
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event.inputs.statuses_sha }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   optimism:
@@ -106,9 +106,11 @@ jobs:
 
       - name: "Download KCFG Cache Results"
         shell: bash
+        continue-on-error: true
         run: |
           pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli download --token ${{ secrets.OPTIMISM_TOKEN }} runtimeverification/optimism-ci:latest -d ./kout-proofs/ 
+          tag=$(git hash-object ./test/kontrol/scripts/run-kontrol.sh)
+          kaas-cli download --token "${{ secrets.OPTIMISM_TOKEN }}" "runtimeverification/optimism-ci:$tag" -d ./kout-proofs/ 
 
       - name: 'Run Kontrol'
         shell: bash
@@ -123,10 +125,11 @@ jobs:
       - name: 'KCFG Upload Cache Results'
         shell: bash
         if: always()
+        continue-on-error: true
         run: |
           pushd optimism/packages/contracts-bedrock > /dev/null
-          kaas-cli upload --token ${{ secrets.OPTIMISM_TOKEN }} runtimeverification/optimism-ci:${{ github.event.inputs.statuses_sha }} -d ./kout-proofs/
-          kaas-cli upload --token ${{ secrets.OPTIMISM_TOKEN }} runtimeverification/optimism-ci:latest -d ./kout-proofs/
+          tag=$(git hash-object ./test/kontrol/scripts/run-kontrol.sh)
+          kaas-cli upload --token "${{ secrets.OPTIMISM_TOKEN }}" "runtimeverification/optimism-ci:$tag" -d ./kout-proofs/
 
       - name: 'Upload KCFG Results to Summary'
         if: always()
