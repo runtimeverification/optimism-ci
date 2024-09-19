@@ -125,6 +125,7 @@ jobs:
       - name: 'KCFG Upload Cache Results'
         shell: bash
         if: always()
+        continue-on-error: true
         run: |
           pushd optimism/packages/contracts-bedrock > /dev/null
           tag=$(git hash-object ./test/kontrol/scripts/run-kontrol.sh)
