@@ -31,6 +31,7 @@ jobs:
   optimism:
     name: 'Optimism Kontrol CI'
     runs-on: [self-hosted, linux, kaas]
+    timeout-minutes: 180 # Set limit to 3 hours
     env:
       GH_TOKEN: ${{ secrets.JENKINS_GITHUB_PAT}}
     steps:
