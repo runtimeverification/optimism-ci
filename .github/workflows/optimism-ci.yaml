@@ -96,14 +96,6 @@ jobs:
           export PATH=$HOME/.foundry/bin:$PATH
           just update-foundry
 
-      - name: "Build Contracts"
-        shell: bash
-        run: |
-          pushd optimism/packages/contracts-bedrock > /dev/null
-          source $HOME/.foundry/bin/foundryup
-          export PATH=$HOME/.foundry/bin:$PATH
-          just build
-
       - name: "Generate Kontrol Summaries"
         shell: bash
         run: |
