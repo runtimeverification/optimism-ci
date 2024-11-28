@@ -94,7 +94,7 @@ jobs:
           pushd optimism > /dev/null
           source $HOME/.foundry/bin/foundryup
           export PATH=$HOME/.foundry/bin:$PATH
-          just update-foundry
+          just install-foundry
 
       - name: "Generate Kontrol Summaries"
         shell: bash
