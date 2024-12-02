@@ -78,30 +78,24 @@ jobs:
       - name: "Set up Rust Toolchain"
         uses: dtolnay/rust-toolchain@stable
 
-      - name: "Install Just"
-        uses: extractions/setup-just@v1
-        with:
-          just-version: 1.35.0
-
-      - name: "Install Foundry"
+      - name: "Install mise"
         shell: bash
         run: |
-          curl -L https://foundry.paradigm.xyz | bash
+          curl https://mise.run | bash
+          echo "$HOME/.local/share/mise/bin" >> $GITHUB_PATH
+          echo "$HOME/.local/share/mise/shims" >> $GITHUB_PATH
 
-      - name: "Update Foundry"
+      - name: "Install Dependencies"
         shell: bash
         run: |
           pushd optimism > /dev/null
-          source $HOME/.foundry/bin/foundryup
-          export PATH=$HOME/.foundry/bin:$PATH
-          just install-foundry
+          mise trust mise.toml
+          mise install
 
       - name: "Generate Kontrol Summaries"
         shell: bash
         run: |
           pushd optimism/packages/contracts-bedrock > /dev/null
-          source $HOME/.foundry/bin/foundryup
-          export PATH=$HOME/.foundry/bin:$PATH
           just kontrol-summary
           just kontrol-summary-fp
 
